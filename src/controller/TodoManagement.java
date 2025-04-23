@@ -44,31 +44,25 @@ public class TodoManagement {
         if (todos.isEmpty()) {
             System.out.println("There's no item on your todo list.");
         } else {
-            List<Integer> actualIndexes = new ArrayList<>();
 
-            // Building a mapping of displayed index to actual list index
-            for (int i = 0; i < todos.size(); i++) {
-                if (!todos.get(i).isComplete()) {
-                    actualIndexes.add(i);
-                }
-            }
+            // getting the actual index of the item
+            int actualIndex = getActualIndex(displayedIndex);
+            if (actualIndex != -1) {
+                Todo removed = todos.remove(actualIndex);
+                System.out.println("'" + removed.getTitle() + "' removed successfully.\n");
 
-            if (displayedIndex < 0 || displayedIndex > actualIndexes.size()) {
+            } else {
                 System.out.println("Invalid index. Please enter a valid number.");
-                return;
             }
-
-            int actualIndex = actualIndexes.get(displayedIndex - 1);
-            Todo removed = todos.remove(actualIndex);
-            System.out.println("'" + removed.getTitle() + "' removed successfully.\n");
         }
     }
 
     // Updating to-dos title
     public void updateTitle(int index, String newTitle) {
         try {
-            String oldTitle = todos.get(index - 1).getTitle();
-            todos.get(index - 1).setTitle(newTitle);
+            int actualIndex = getActualIndex(index);
+            String oldTitle = todos.get(actualIndex).getTitle();
+            todos.get(actualIndex).setTitle(newTitle);
             System.out.println("'" + oldTitle + "' successfully updated to '" + newTitle + "'\n");
         } catch (Exception e) {
             System.err.println("A problem happened while updating the title.");
@@ -82,13 +76,18 @@ public class TodoManagement {
         // Checks if the list is empty
         if (todos.isEmpty()) {
             System.out.println("There's no item on your todo list.");
-        } else if (todos.get(index - 1) == null) { // checks if the entered index is valid
-            System.out.println("Item was not found. Make sure you are entering the right number.");
         } else {
-            String itemTitle = todos.get(index - 1).getTitle();
-            // Updated the status to completed
-            todos.get(index - 1).setComplete(true);
-            System.out.println("'" + itemTitle + "' marked as done.\n");
+            int actualIndex = getActualIndex(index);
+            if (actualIndex != -1) {
+                String itemTitle = todos.get(actualIndex).getTitle();
+
+                // Updated the status to completed
+                todos.get(actualIndex).setComplete(true);
+
+                System.out.println("'" + itemTitle + "' marked as done.\n");
+            } else {
+                System.out.println("Item was not found. Make sure you are entering the right number.");
+            }
         }
     }
 
@@ -170,5 +169,23 @@ public class TodoManagement {
         }
 
         System.out.println();
+    }
+
+    private int getActualIndex(int displayedIndex) {
+        List<Integer> actualIndexes = new ArrayList<>();
+
+        // Building a mapping of displayed index to actual list index
+        for (int i = 0; i < todos.size(); i++) {
+            if (!todos.get(i).isComplete()) {
+                actualIndexes.add(i);
+            }
+        }
+
+        // checking for invalid index
+        if (displayedIndex < 0 || displayedIndex > actualIndexes.size()) {
+            return -1;
+        }
+
+        return actualIndexes.get(displayedIndex - 1);
     }
 }
