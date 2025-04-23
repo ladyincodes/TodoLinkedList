@@ -3,15 +3,36 @@ package controller;
 import model.Todo;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 public class TodoManagement {
-    LinkedList<Todo> todos;
+    private List<Todo> todos;
+    private final TodoSerializer serializer = new TodoSerializer();
 
     public TodoManagement() {
-        todos = new LinkedList<>();
+        todos = new ArrayList<>();
+
+        // checks and loads if there is a to-do object file saved previously
+        List<Todo> restoredTodos = serializer.loadTodos("src/resources/todos.ser");
+        if (restoredTodos != null) {
+            // the object might exist, so checks if it's not empty
+            if (!restoredTodos.isEmpty()) {
+                setTodos(restoredTodos);
+                System.out.println("Todos loaded successfully from the file.\n");
+            }
+        }
+    }
+
+    // saving todos object to the defined fileName
+    public void saveTodosStatus() {
+        serializer.saveTodos(todos, "src/resources/todos.ser");
+        System.out.println("Last status of the todos saved to the file.");
+    }
+
+    // in case there was a to-do object saved in the past
+    private void setTodos(List<Todo> todos) {
+        this.todos = todos;
     }
 
     // Adding new items to the to-do list

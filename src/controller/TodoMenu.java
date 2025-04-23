@@ -4,24 +4,18 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class TodoMenu {
-    Scanner scanner;
-    private final TodoManagement todoManager = new TodoManagement();
+    private final Scanner scanner;
+    private final TodoManagement todoManager;
     // TODO: Initialize UserInteractionLogger
-    // TODO: Initialize TodoSerializer
 
     public TodoMenu() {
-        // TODO: load the todo list object when the program starts
-    }
-
-    void closeApp() {
-        // TODO: save object to the file
-    }
-
-    // TODO: display menu
-    public void displayMenu() {
+        todoManager = new TodoManagement();
         scanner = new Scanner(System.in);
         // TODO: log program started
 
+    }
+
+    public void displayMenu() {
         while (true) {
             System.out.println("*** Main Menu ***");
             System.out.println("1. View all pending tasks");
@@ -103,8 +97,8 @@ public class TodoMenu {
                     break;
 
                 case 10:
-                    // closing the application
-                    closeApp();
+                    // saves the current todos status before closing the application
+                    todoManager.saveTodosStatus();
                     // TODO: log closing app
                     return;
 
