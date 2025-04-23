@@ -6,12 +6,11 @@ import java.util.Scanner;
 public class TodoMenu {
     private final Scanner scanner;
     private final TodoManagement todoManager;
-    // TODO: Initialize UserInteractionLogger
 
     public TodoMenu() {
         todoManager = new TodoManagement();
         scanner = new Scanner(System.in);
-        // TODO: log program started
+
 
     }
 
@@ -25,7 +24,7 @@ public class TodoMenu {
             System.out.println("5. Update a task's title");
             System.out.println("6. Remove a task by title");
             System.out.println("7. Remove a task by number");
-            System.out.println("8. Marking a task as undone");
+            System.out.println("8. Mark a task as undone");
             System.out.println("9. View all(pending/completed) tasks");
             System.out.println("10. Exit");
             System.out.println("Enter your choice: ");
@@ -45,61 +44,51 @@ public class TodoMenu {
                 case 1:
                     // showing a list of all pending tasks
                     todoManager.showPendingItems();
-                    // TODO: LOG
                     break;
 
                 case 2:
                     // creating a new task
                     createNewTask();
-                    // TODO: LOG
                     break;
 
                 case 3:
                     // marking a task as done (completed)
                     markTaskAsDone();
-                    // TODO: LOG
                     break;
 
                 case 4:
                     // showing a list of completed (done) tasks
                     todoManager.showCompletedItems();
-                    // TODO: LOG
                     break;
 
                 case 5:
                     // updating a current task's title
                     updateToANewTitle();
-                    // TODO: LOG
                     break;
 
                 case 6:
                     // removing a task from to-do list by its title
                     removeByTitle();
-                    // TODO: LOG
                     break;
 
                 case 7:
                     // removing a task from to-do list by its number in the list
                     removeByNumber();
-                    // TODO: LOG
                     break;
 
                 case 8:
                     // marking a completed(done) task as undone(pending)
                     markTaskAsUndone();
-                    // TODO: LOG
                     break;
 
                 case 9:
                     // showing all the completed/pending items on the to-do list
                     todoManager.showAllItems();
-                    // TODO: LOG
                     break;
 
                 case 10:
                     // saves the current todos status before closing the application
                     todoManager.saveTodosStatus();
-                    // TODO: log closing app
                     return;
 
                 default:

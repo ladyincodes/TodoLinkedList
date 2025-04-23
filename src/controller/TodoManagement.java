@@ -9,10 +9,12 @@ import java.util.ListIterator;
 public class TodoManagement {
     private List<Todo> todos;
     private final TodoSerializer serializer = new TodoSerializer();
+    private final UserInteractionLogger logger = new UserInteractionLogger();
 
     public TodoManagement() {
-        todos = new ArrayList<>();
+        logger.log("Program started.");
 
+        todos = new ArrayList<>();
         // checks and loads if there is a to-do object file saved previously
         List<Todo> restoredTodos = serializer.loadTodos("src/resources/todos.ser");
         if (restoredTodos != null) {
@@ -20,6 +22,7 @@ public class TodoManagement {
             if (!restoredTodos.isEmpty()) {
                 setTodos(restoredTodos);
                 System.out.println("Todos loaded successfully from the file.\n");
+                logger.log("Loaded todos from the file successfully.");
             }
         }
     }
@@ -28,6 +31,7 @@ public class TodoManagement {
     public void saveTodosStatus() {
         serializer.saveTodos(todos, "src/resources/todos.ser");
         System.out.println("Last status of the todos saved to the file.");
+        logger.log("Saved todos last status to the file. Closing the app...");
     }
 
     // in case there was a to-do object saved in the past
@@ -38,6 +42,7 @@ public class TodoManagement {
     // Adding new items to the to-do list
     public void addItem(String title) {
         todos.add(new Todo(title));
+        logger.log("Added a new task to the list: " + title);
     }
 
     // Removing an item from to-do list based on their title
@@ -52,10 +57,12 @@ public class TodoManagement {
                     String todoTitle = todo.getTitle();
                     iterator.remove();
                     System.out.println("'" + todoTitle + "' removed successfully.\n");
+                    logger.log("Removed a task by its title: " + todoTitle);
                     return;
                 }
             }
             System.out.println("'" + title + "' was not found on the list.\nCheck the spelling and try again.\n");
+            logger.log("Failed to remove a task by its title: " + title);
         }
     }
 
@@ -71,9 +78,11 @@ public class TodoManagement {
             if (actualIndex != -1) {
                 Todo removed = todos.remove(actualIndex);
                 System.out.println("'" + removed.getTitle() + "' removed successfully.\n");
+                logger.log("Removed a task by its index: " + removed.getTitle());
 
             } else {
                 System.out.println("Invalid index. Please enter a valid number.");
+                logger.log("Failed to remove a task by its index: " + displayedIndex);
             }
         }
     }
@@ -85,10 +94,12 @@ public class TodoManagement {
             String oldTitle = todos.get(actualIndex).getTitle();
             todos.get(actualIndex).setTitle(newTitle);
             System.out.println("'" + oldTitle + "' successfully updated to '" + newTitle + "'\n");
+            logger.log("Update a task's title from " + oldTitle + " to " + newTitle);
         } catch (Exception e) {
             System.err.println("A problem happened while updating the title.");
             System.err.println("Error: " + e.getMessage());
             System.out.println();
+            logger.log("Failed to update a task's title at index " + index);
         }
     }
 
@@ -106,8 +117,10 @@ public class TodoManagement {
                 todos.get(actualIndex).setComplete(true);
 
                 System.out.println("'" + itemTitle + "' marked as done.\n");
+                logger.log("Marked '" + itemTitle + "' as done.");
             } else {
                 System.out.println("Item was not found. Make sure you are entering the right number.");
+                logger.log("Failed to mark the task at index " + index + " as done.");
             }
         }
     }
@@ -123,10 +136,13 @@ public class TodoManagement {
                 if (todo.isComplete() && todo.getTitle().equalsIgnoreCase(title.trim())) {
                     todo.setComplete(false);
                     System.out.println("'" + todo.getTitle() + "' marked as undone.\n");
+                    logger.log("Marked '" + todo.getTitle() + "' as undone.");
                     return;
                 }
             }
+
             System.out.println("'" + title + "' was not found on the list.\nCheck the spelling and try again.\n");
+            logger.log("Failed to mark '" + title + "' as undone.");
         }
     }
 
@@ -145,9 +161,9 @@ public class TodoManagement {
                     counter++;
                 }
             }
-        }
 
-        System.out.println();
+            logger.log("Showed a list of pending tasks.");
+        }
     }
 
     // Showing a list of completed items
@@ -164,9 +180,9 @@ public class TodoManagement {
                     counter++;
                 }
             }
-        }
 
-        System.out.println();
+            logger.log("Showed a list of completed tasks.");
+        }
     }
 
     // Show all items on to-do list (both completed and pending)
@@ -187,9 +203,9 @@ public class TodoManagement {
                 System.out.println();
                 counter++;
             }
-        }
 
-        System.out.println();
+            logger.log("Showed a list of all tasks.");
+        }
     }
 
     private int getActualIndex(int displayedIndex) {
