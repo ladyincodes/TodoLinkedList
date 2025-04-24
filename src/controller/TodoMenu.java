@@ -23,7 +23,7 @@ public class TodoMenu {
             System.out.println("4. View completed tasks");
             System.out.println("5. Update a task's title");
             System.out.println("6. Remove a task by title");
-            System.out.println("7. Remove a task by number");
+            System.out.println("7. Remove a task by index");
             System.out.println("8. Mark a task as undone");
             System.out.println("9. View all(pending/completed) tasks");
             System.out.println("10. Exit");
